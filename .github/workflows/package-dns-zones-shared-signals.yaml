@@ -20,20 +20,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Setup Python 3.8
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
         with:
           python-version: '3.8'
       - name: Setup SAM CLI
-        uses: aws-actions/setup-sam@v2
+        uses: aws-actions/setup-sam@f664fad9e12492edfc187a31f575537dfbb0ff63 # v2
       - name: Assume AWS role
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.SHARED_SIGNALS_DNS_ZONES_GH_ACTIONS_ROLE_ARN }}
       - name: Package SAM app
-        uses: govuk-one-login/devplatform-upload-action@v3.8.1
+        uses: govuk-one-login/devplatform-upload-action@2281463e2a4ea137fa3ff96b4620e5e39b01d7b7 # v3.8.1
         with:
           artifact-bucket-name: ${{ secrets.SHARED_SIGNALS_DNS_ZONES_ARTIFACT_BUCKET_NAME }}
           signing-profile-name: ${{ secrets.SHARED_SIGNALS_SIGNING_PROFILE_NAME }}
