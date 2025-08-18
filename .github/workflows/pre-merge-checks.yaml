@@ -1,9 +1,6 @@
 name: Validate & lint templates
 
-on:
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
   validate-templates:
@@ -11,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3.6.0
       - name: Setup Python 3.8
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4.9.1
         with:
           python-version: '3.8'
       - name: Install yamlfix
@@ -21,11 +18,11 @@ jobs:
       - name: Run yamlfix
         run: yamlfix -c .yamlfix.toml --check .
       - name: Setup SAM CLI
-        uses: aws-actions/setup-sam@v2
+        uses: aws-actions/setup-sam@f664fad9e12492edfc187a31f575537dfbb0ff63  # v2
       - name: Validate SAM templates
         run: ./scripts/validate-templates.sh
       - name: Run Checkov on SAM templates
-        uses: bridgecrewio/checkov-action@master
+        uses: bridgecrewio/checkov-action@c903af70b3b45a75049af3b64f5e15db11ea76de  # v12.3046.0
         with:
           directory: infrastructure/
           quiet: true
