@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744  # v3.6.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
       - name: Setup Python 3.8
-        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4.9.1
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c  # v6.0.0
         with:
           python-version: '3.8'
       - name: Install yamlfix
@@ -18,11 +18,11 @@ jobs:
       - name: Run yamlfix
         run: yamlfix -c .yamlfix.toml --check .
       - name: Setup SAM CLI
-        uses: aws-actions/setup-sam@f664fad9e12492edfc187a31f575537dfbb0ff63  # v2
+        uses: aws-actions/setup-sam@c71dd89d980e49367c70391e8ada4353f52f2800  # v2
       - name: Validate SAM templates
         run: ./scripts/validate-templates.sh
       - name: Run Checkov on SAM templates
-        uses: bridgecrewio/checkov-action@c903af70b3b45a75049af3b64f5e15db11ea76de  # v12.3046.0
+        uses: bridgecrewio/checkov-action@5abded944c5e3fb597c3fcb4f2a5aa83d9c73f8b  # v12.3070.0
         with:
           directory: infrastructure/
           quiet: true
