@@ -1,0 +1,18 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-deps:
+        patterns:
+          - '*'
+    target-branch: main
+    labels:
+      - direct-dependency-update
+      - dependencies
+      - github_actions
+    commit-message:
+      prefix: BAU
