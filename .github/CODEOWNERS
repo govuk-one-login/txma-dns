@@ -1,1 +1,6 @@
-* @govuk-one-login/txma-team
+**/*audit*/** @govuk-one-login/txma-team
+**/*query-results*/** @govuk-one-login/txma-team
+**/*shared-signals*/** @govuk-one-login/signals-exchange-team
+
+# Default: all other files require approval from both teams
+* @govuk-one-login/txma-team @govuk-one-login/signals-exchange-team
