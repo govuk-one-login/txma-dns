@@ -49,7 +49,7 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
-      SecurityPolicy: TLS_1_2
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
 
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
@@ -101,7 +101,7 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
-      SecurityPolicy: TLS_1_2
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
 
   SharedSignalsTransmitterApiAliasRecord:
     Type: AWS::Route53::RecordSet
