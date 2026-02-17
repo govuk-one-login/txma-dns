@@ -24,6 +24,13 @@ Conditions:
     - !Equals
         - !Ref Environment
         - staging
+  IsNonProduction: !Or
+    - !Equals
+        - !Ref Environment
+        - build
+    - !Equals
+        - !Ref Environment
+        - staging
 
 Resources:
   ##################
@@ -49,7 +56,10 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
-      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      SecurityPolicy: !If
+        - IsNonProduction
+        - SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
+        - !Ref AWS::NoValue
 
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
@@ -101,7 +111,10 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
-      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      SecurityPolicy: !If
+        - IsNonProduction
+        - SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
+        - !Ref AWS::NoValue
 
   SharedSignalsTransmitterApiAliasRecord:
     Type: AWS::Route53::RecordSet
