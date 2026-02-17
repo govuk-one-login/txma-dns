@@ -60,7 +60,6 @@ Resources:
         - IsNonProduction
         - SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
         - !Ref AWS::NoValue
-
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
     Type: AWS::Route53::RecordSet
