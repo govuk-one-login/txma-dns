@@ -58,8 +58,8 @@ Resources:
       RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
       SecurityPolicy: !If
         - IsNonProduction
-        - SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
-        - !Ref AWS::NoValue
+        - SecurityPolicy_TLS13_1_2_PQ_2025_09
+        - TLS_1_2
 
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
@@ -113,8 +113,8 @@ Resources:
       RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
       SecurityPolicy: !If
         - IsNonProduction
-        - SecurityPolicy_TLS13_1_2_PFS_PQ_2025_09
-        - !Ref AWS::NoValue
+        - SecurityPolicy_TLS13_1_2_PQ_2025_09
+        - TLS_1_2
 
   SharedSignalsTransmitterApiAliasRecord:
     Type: AWS::Route53::RecordSet
