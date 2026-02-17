@@ -56,10 +56,7 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
-      SecurityPolicy: !If
-        - IsNonProduction
-        - SecurityPolicy_TLS13_1_2_PQ_2025_09
-        - TLS_1_2
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
 
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
