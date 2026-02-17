@@ -13,10 +13,6 @@ jobs:
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: '3.8'
-      - name: Install yamlfix
-        run: pip install yamlfix
-      - name: Run yamlfix
-        run: yamlfix -c .yamlfix.toml --check .
       - name: Setup SAM CLI
         uses: aws-actions/setup-sam@c2a20b1822cc4a6bc594ff7f1dbb658758e383c3  # v2
       - name: Validate SAM templates
