@@ -50,6 +50,11 @@ Resources:
   SharedSignalsMockReceiverApiDomainName:
     Condition: MockReceiverCustomDomain
     Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
     Properties:
       DomainName: !Sub shared-signals-mock-receiver.transaction.${Environment}.account.gov.uk
       EndpointConfiguration:
@@ -57,6 +62,7 @@ Resources:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
       SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC  # STRICT may be too restrictive however with BASIC we already have DisableExecuteApiEndpoint: true
 
   SharedSignalsMockReceiverApiAliasRecord:
     Condition: MockReceiverCustomDomain
@@ -99,6 +105,11 @@ Resources:
 
   SharedSignalsTransmitterApiDomainName:
     Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
     Properties:
       DomainName: !If
         - IsProduction
@@ -112,6 +123,7 @@ Resources:
         - IsNonProduction
         - SecurityPolicy_TLS13_1_2_PQ_2025_09
         - TLS_1_2
+      EndpointAccessMode: BASIC  # STRICT may be too restrictive however with BASIC we already have DisableExecuteApiEndpoint: true
 
   SharedSignalsTransmitterApiAliasRecord:
     Type: AWS::Route53::RecordSet
