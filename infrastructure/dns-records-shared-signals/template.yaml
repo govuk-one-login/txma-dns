@@ -24,16 +24,6 @@ Conditions:
     - !Equals
         - !Ref Environment
         - staging
-  IsNonProduction: !Or
-    - !Equals
-        - !Ref Environment
-        - build
-    - !Equals
-        - !Ref Environment
-        - staging
-    - !Equals
-      - !Ref Environment
-      - integration
 
 Resources:
   ##################
@@ -122,14 +112,8 @@ Resources:
         Types:
           - REGIONAL
       RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
-      SecurityPolicy: !If
-        - IsNonProduction
-        - SecurityPolicy_TLS13_1_2_PQ_2025_09
-        - TLS_1_2
-      EndpointAccessMode: !If
-        - IsNonProduction
-        - BASIC
-        - !Ref AWS::NoValue
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC
 
   SharedSignalsTransmitterApiAliasRecord:
     Type: AWS::Route53::RecordSet
