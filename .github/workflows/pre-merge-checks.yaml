@@ -14,11 +14,11 @@ jobs:
         with:
           python-version: '3.8'
       - name: Setup SAM CLI
-        uses: aws-actions/setup-sam@c2a20b1822cc4a6bc594ff7f1dbb658758e383c3  # v2
+        uses: aws-actions/setup-sam@d78e1a4a9656d3b223e59b80676a797f20093133  # v2
       - name: Validate SAM templates
         run: ./scripts/validate-templates.sh
       - name: Run Checkov on SAM templates
-        uses: bridgecrewio/checkov-action@f34885219720066007f948b843e747bb136aa223  # v12.3080.0
+        uses: bridgecrewio/checkov-action@f99709f8ccc3496220c987b7d8729653237c23dc  # v12.3086.0
         with:
           directory: infrastructure/
           quiet: true
