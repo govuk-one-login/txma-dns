@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: |
+  Creates all necessary DNS resources in the Shared Signals account
+
+Parameters:
+  Environment:
+    Description: Name of Environment to deploy to
+    Type: String
+    AllowedValues:
+      - build
+      - staging
+      - integration
+      - production
+
+Conditions:
+  IsProduction: !Equals
+    - !Ref Environment
+    - production
+  MockReceiverCustomDomain: !Or
+    - !Equals [!Ref Environment, staging]
+    - !Equals [!Ref Environment, build]
+
+Resources:
+
+  SharedSignalsTransmitterApiPublicHostedZone:
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+
+
+  SharedSignalsTransmitterCognitoPublicHostedZone:
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !If
+        - IsProduction
+        - auth.transmitter.signal-exchange.account.gov.uk
+        - !Sub 'auth.transmitter.signal-exchange.${Environment}.account.gov.uk'
+
+  SharedSignalsMockReceiverApiPublicHostedZone:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
