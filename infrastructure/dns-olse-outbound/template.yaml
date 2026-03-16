@@ -50,3 +50,28 @@ Resources:
     UpdateReplacePolicy: Retain
     Properties:
       Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+
+  SharedSignalsTransmitterApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+      DomainValidationOptions:
+        - DomainName: !If
+            - IsProduction
+            - transmitter.signal-exchange.account.gov.uk
+            - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+          HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
+      ValidationMethod: DNS
+
+  SharedSignalsMockReceiverApiCertificate:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      DomainValidationOptions:
+        - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+          HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
+      ValidationMethod: DNS
