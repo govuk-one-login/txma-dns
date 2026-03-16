@@ -75,25 +75,3 @@ Resources:
         - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
           HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
       ValidationMethod: DNS
-
-  SharedSignalsTransmitterApiDomainNameParameter:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: SharedSignalsTransmitterApiDomainName
-      Type: String
-      Value: !Ref SharedSignalsTransmitterApiDomainName
-
-  SharedSignalsMockReceiverApiDomainNameParameter:
-    Condition: MockReceiverCustomDomain
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: SharedSignalsMockReceiverApiDomainName
-      Type: String
-      Value: !Ref SharedSignalsMockReceiverApiDomainName
-
-  CognitoDomainUrlParameter:
-    Type: AWS::SSM::Parameter
-    Properties:
-      Name: CognitoDomainUrl
-      Type: String
-      Value: !Ref SsfUserPoolDomain
