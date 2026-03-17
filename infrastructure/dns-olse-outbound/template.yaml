@@ -68,6 +68,7 @@ Resources:
 
   SharedSignalsMockReceiverApiCertificate:
     Condition: MockReceiverCustomDomain
+    DependsOn: SignalExchangeMockReceiverDnsDelegation
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
