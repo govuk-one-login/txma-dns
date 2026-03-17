@@ -75,3 +75,23 @@ Resources:
         - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
           HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
       ValidationMethod: DNS
+
+  SignalExchangeHostedZone:
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !If
+        - IsProduction
+        - signal-exchange.account.gov.uk
+        - !Sub 'signal-exchange.${Environment}.account.gov.uk'
+
+  SignalExchangeMockReceiverDnsDelegation:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !GetAtt SignalExchangeHostedZone.Id
+      Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
