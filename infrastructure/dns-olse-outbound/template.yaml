@@ -44,6 +44,15 @@ Resources:
     Properties:
       Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
 
+  SignalExchangeMockReceiverDnsDelegation:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !GetAtt SignalExchangeHostedZone.Id
+      Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
 
   ###############
   #  Transmitter  #
@@ -59,6 +68,18 @@ Resources:
         - transmitter.signal-exchange.account.gov.uk
         - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
 
+  SignalExchangeTransmitterDnsDelegation:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !GetAtt SignalExchangeHostedZone.Id
+      Name: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
+
 
   ###############################
   # Transmitter Cognito User Pool  #
@@ -73,6 +94,18 @@ Resources:
         - IsProduction
         - auth.transmitter.signal-exchange.account.gov.uk
         - !Sub 'auth.transmitter.signal-exchange.${Environment}.account.gov.uk'
+
+  SignalExchangeTransmitterCognitoDnsDelegation:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !GetAtt SignalExchangeHostedZone.Id
+      Name: !If
+        - IsProduction
+        - auth.transmitter.signal-exchange.account.gov.uk
+        - !Sub 'auth.transmitter.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt SharedSignalsTransmitterCognitoPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
 
 #  SharedSignalsTransmitterApiCertificate:
 #    Type: AWS::CertificateManager::Certificate
@@ -99,14 +132,3 @@ Resources:
 #        - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
 #          HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
 #      ValidationMethod: DNS
-
-
-#  SignalExchangeMockReceiverDnsDelegation:
-#    Condition: MockReceiverCustomDomain
-#    Type: AWS::Route53::RecordSet
-#    Properties:
-#      HostedZoneId: !GetAtt SignalExchangeHostedZone.Id
-#      Name: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
-#      ResourceRecords: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.NameServers
-#      TTL: '300'
-#      Type: NS
