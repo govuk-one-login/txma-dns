@@ -54,6 +54,17 @@ Resources:
       TTL: '300'
       Type: NS
 
+  SharedSignalsMockReceiverApiCertificate:
+    Condition: MockReceiverCustomDomain
+    DependsOn: SignalExchangeMockReceiverDnsDelegation
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      DomainValidationOptions:
+        - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+          HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
+      ValidationMethod: DNS
+
   ###############
   #  Transmitter  #
   ###############
@@ -80,6 +91,21 @@ Resources:
       TTL: '300'
       Type: NS
 
+  SharedSignalsTransmitterApiCertificate:
+    DependsOn: SignalExchangeTransmitterDnsDelegation
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+      DomainValidationOptions:
+        - DomainName: !If
+            - IsProduction
+            - transmitter.signal-exchange.account.gov.uk
+            - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+          HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
+      ValidationMethod: DNS
 
   ###############################
   # Transmitter Cognito User Pool  #
@@ -107,28 +133,8 @@ Resources:
       TTL: '300'
       Type: NS
 
-#  SharedSignalsTransmitterApiCertificate:
-#    Type: AWS::CertificateManager::Certificate
-#    Properties:
-#      DomainName: !If
-#        - IsProduction
-#        - transmitter.signal-exchange.account.gov.uk
-#        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
-#      DomainValidationOptions:
-#        - DomainName: !If
-#            - IsProduction
-#            - transmitter.signal-exchange.account.gov.uk
-#            - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
-#          HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
-#      ValidationMethod: DNS
-#
-#  SharedSignalsMockReceiverApiCertificate:
-#    Condition: MockReceiverCustomDomain
-#    DependsOn: SignalExchangeMockReceiverDnsDelegation
-#    Type: AWS::CertificateManager::Certificate
-#    Properties:
-#      DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
-#      DomainValidationOptions:
-#        - DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
-#          HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
-#      ValidationMethod: DNS
+Outputs:
+  SignalExchangeHostedZoneId:
+    Value: !GetAtt SignalExchangeHostedZone.Id
+    Export:
+      Name: SignalExchangeHostedZoneId
