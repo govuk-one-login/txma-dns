@@ -65,6 +65,23 @@ Resources:
           HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
       ValidationMethod: DNS
 
+  SharedSignalsMockReceiverApiDomainName:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+    Properties:
+      DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC  # STRICT may be too restrictive however with BASIC we already have DisableExecuteApiEndpoint: true
+
   ###############
   #  Transmitter  #
   ###############
@@ -106,6 +123,25 @@ Resources:
             - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
           HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
       ValidationMethod: DNS
+
+  SharedSignalsTransmitterApiDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC
 
   ###############################
   # Transmitter Cognito User Pool  #
