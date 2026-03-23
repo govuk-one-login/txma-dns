@@ -72,7 +72,7 @@ Resources:
       cfn-lint:
         config:
           ignore_checks:
-            - E3002
+            - E3002  # Required as EndpointAccessMode gets flagged as "Additional property not allowed" which means that cfn-lint does not recognise this property as valid even though it is, this is possibly a fairly new property added that cfn-lint has not been able to update its validation schema.
     Properties:
       DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
       EndpointConfiguration:
@@ -137,7 +137,7 @@ Resources:
       cfn-lint:
         config:
           ignore_checks:
-            - E3002
+            - E3002 # Required as EndpointAccessMode gets flagged as "Additional property not allowed" which means that cfn-lint does not recognise this property as valid even though it is, this is possibly a fairly new property added that cfn-lint has not been able to update its validation schema.
     Properties:
       DomainName: !If
         - IsProduction

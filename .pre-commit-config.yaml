@@ -1,17 +1,17 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/aws-cloudformation/cfn-lint
-    rev: v0.78.1
+    rev: v1.47.0
     hooks:
       - id: cfn-lint
         files: infrastructure/.*/(template.yaml)$
   - repo: https://github.com/bridgecrewio/checkov
-    rev: 2.3.329
+    rev: 3.2.510
     hooks:
       - id: checkov_diff
-        entry: checkov --framework cloudformation -f
+        entry: checkov --framework cloudformation
         files: template\.yaml$
