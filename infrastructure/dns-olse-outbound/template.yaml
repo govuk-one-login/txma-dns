@@ -65,6 +65,30 @@ Resources:
           HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
       ValidationMethod: DNS
 
+  SharedSignalsMockReceiverApiDomainName:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002  # Required as EndpointAccessMode gets flagged as "Additional property not allowed" which means that cfn-lint does not recognise this property as valid even though it is, this is possibly a fairly new property added that cfn-lint has not been able to update its validation schema.
+    Properties:
+      DomainName: !Sub 'mock-receiver.signal-exchange.${Environment}.account.gov.uk'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref SharedSignalsMockReceiverApiCertificate
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC  # STRICT may be too restrictive however with BASIC we already have DisableExecuteApiEndpoint: true
+
+  SharedSignalsMockReceiverApiDomainNameParameter:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MockReceiverApiDomainName
+      Type: String
+      Value: !Ref SharedSignalsMockReceiverApiDomainName
   ###############
   #  Transmitter  #
   ###############
@@ -107,7 +131,33 @@ Resources:
           HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
       ValidationMethod: DNS
 
+  SharedSignalsTransmitterApiDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002 # Required as EndpointAccessMode gets flagged as "Additional property not allowed" which means that cfn-lint does not recognise this property as valid even though it is, this is possibly a fairly new property added that cfn-lint has not been able to update its validation schema.
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - transmitter.signal-exchange.account.gov.uk
+        - !Sub 'transmitter.signal-exchange.${Environment}.account.gov.uk'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref SharedSignalsTransmitterApiCertificate
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC
+
+  SharedSignalsTransmitterApiDomainNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: TransmitterApiDomainName
+      Type: String
+      Value: !Ref SharedSignalsTransmitterApiDomainName
   ###############################
+
   # Transmitter Cognito User Pool  #
   ################################
 
