@@ -82,6 +82,13 @@ Resources:
       SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
       EndpointAccessMode: BASIC  # STRICT may be too restrictive however with BASIC we already have DisableExecuteApiEndpoint: true
 
+  SharedSignalsMockReceiverApiDomainNameParameter:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MockReceiverApiDomainName
+      Type: String
+      Value: !Ref SharedSignalsMockReceiverApiDomainName
   ###############
   #  Transmitter  #
   ###############
@@ -143,7 +150,14 @@ Resources:
       SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
       EndpointAccessMode: BASIC
 
+  SharedSignalsTransmitterApiDomainNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: TransmitterApiDomainName
+      Type: String
+      Value: !Ref SharedSignalsTransmitterApiDomainName
   ###############################
+
   # Transmitter Cognito User Pool  #
   ################################
 
