@@ -89,6 +89,19 @@ Resources:
       Name: MockReceiverApiDomainName
       Type: String
       Value: !Ref SharedSignalsMockReceiverApiDomainName
+
+  SharedSignalsMockReceiverApiAliasRecord:
+    Condition: MockReceiverCustomDomain
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt SharedSignalsMockReceiverApiDomainName.RegionalDomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: !GetAtt SharedSignalsMockReceiverApiDomainName.RegionalHostedZoneId
+      HostedZoneId: !GetAtt SharedSignalsMockReceiverApiPublicHostedZone.Id
+      Name: !Ref SharedSignalsMockReceiverApiDomainName
+      Type: A
+
   ###############
   #  Transmitter  #
   ###############
@@ -156,6 +169,18 @@ Resources:
       Name: TransmitterApiDomainName
       Type: String
       Value: !Ref SharedSignalsTransmitterApiDomainName
+
+  SharedSignalsTransmitterApiAliasRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt SharedSignalsTransmitterApiDomainName.RegionalDomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: !GetAtt SharedSignalsTransmitterApiDomainName.RegionalHostedZoneId
+      HostedZoneId: !GetAtt SharedSignalsTransmitterApiPublicHostedZone.Id
+      Name: !Ref SharedSignalsTransmitterApiDomainName
+      Type: A
+
   ###############################
 
   # Transmitter Cognito User Pool  #
