@@ -33,18 +33,6 @@ Resources:
         - receiver.signal-exchange.account.gov.uk
         - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
 
-  FraudSSFReceiverDnsDelegation:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId: !ImportValue SignalExchangeHostedZoneId
-      Name: !If
-        - IsProduction
-        - receiver.signal-exchange.account.gov.uk
-        - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
-      ResourceRecords: !GetAtt FraudSSFReceiverApiPublicHostedZone.NameServers
-      TTL: '300'
-      Type: NS
-
   ###########
   # Cognito #
   ###########
@@ -58,15 +46,3 @@ Resources:
         - IsProduction
         - auth.receiver.signal-exchange.account.gov.uk
         - !Sub 'auth.receiver.signal-exchange.${Environment}.account.gov.uk'
-
-  SignalExchangeTransmitterCognitoDnsDelegation:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId: !ImportValue SignalExchangeHostedZoneId
-      Name: !If
-        - IsProduction
-        - auth.receiver.signal-exchange.account.gov.uk
-        - !Sub 'auth.receiver.signal-exchange.${Environment}.account.gov.uk'
-      ResourceRecords: !GetAtt FraudSSFReceiverCognitoPublicHostedZone.NameServers
-      TTL: '300'
-      Type: NS
