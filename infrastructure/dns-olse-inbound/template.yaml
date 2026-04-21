@@ -13,7 +13,7 @@ Parameters:
       - production
 
 Mappings:
-  HostedZoneIds:
+  ParentHostedZoneIds:
     build:
       SignalExchangeHostedZoneId: Z0642694YO506V4QP5
     staging:
@@ -47,7 +47,7 @@ Resources:
   FraudSSFReceiverDnsDelegation:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !FindInMap [HostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
+      HostedZoneId: !FindInMap [ParentHostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
       Name: !If
         - IsProduction
         - receiver.signal-exchange.account.gov.uk
@@ -73,7 +73,7 @@ Resources:
   SignalExchangeTransmitterCognitoDnsDelegation:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !FindInMap [HostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
+      HostedZoneId: !FindInMap [ParentHostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
       Name: !If
         - IsProduction
         - auth.receiver.signal-exchange.account.gov.uk
