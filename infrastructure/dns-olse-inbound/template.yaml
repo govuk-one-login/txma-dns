@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: |
+  Creates all necessary DNS resources in the Fraud SSF account
+
+Parameters:
+  Environment:
+    Description: Name of Environment to deploy to
+    Type: String
+    AllowedValues:
+      - build
+      - staging
+      - integration
+      - production
+
+Conditions:
+  IsProduction: !Equals
+    - !Ref Environment
+    - production
+
+Resources:
+
+  ###########
+  # Receiver #
+  ###########
+
+  FraudSSFReceiverApiPublicHostedZone:
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !If
+        - IsProduction
+        - receiver.signal-exchange.account.gov.uk
+        - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
+
+  ###########
+  # Cognito #
+  ###########
+
+  FraudSSFReceiverCognitoPublicHostedZone:
+    Type: AWS::Route53::HostedZone
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Name: !If
+        - IsProduction
+        - auth.receiver.signal-exchange.account.gov.uk
+        - !Sub 'auth.receiver.signal-exchange.${Environment}.account.gov.uk'
