@@ -12,6 +12,17 @@ Parameters:
       - integration
       - production
 
+Mappings:
+  ParentHostedZoneIds: # Hardcoded values as SignalExchangeHostedZones lives in the Shared Signals AWS Account in this template here https://github.com/govuk-one-login/txma-dns/blob/main/infrastructure/dns-olse-outbound/template.yaml#L25 and !ImportValue cannot be used cross-account hence why we have decided to add values in the mappings to be referenced via !FindInMap.
+    build:
+      SignalExchangeHostedZoneId: Z0642694YO506V4QP5
+    staging:
+      SignalExchangeHostedZoneId: Z064216513RP67UPZIN3O
+    integration:
+      SignalExchangeHostedZoneId: Z06469731BEEOQ2HDBB1E
+    production:
+      SignalExchangeHostedZoneId: Z08278793VE452BET1X9M
+
 Conditions:
   IsProduction: !Equals
     - !Ref Environment
@@ -33,6 +44,18 @@ Resources:
         - receiver.signal-exchange.account.gov.uk
         - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
 
+  FraudSSFReceiverDnsDelegation:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !FindInMap [ParentHostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
+      Name: !If
+        - IsProduction
+        - receiver.signal-exchange.account.gov.uk
+        - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt FraudSSFReceiverApiPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
+
   ###########
   # Cognito #
   ###########
@@ -46,3 +69,15 @@ Resources:
         - IsProduction
         - auth.receiver.signal-exchange.account.gov.uk
         - !Sub 'auth.receiver.signal-exchange.${Environment}.account.gov.uk'
+
+  SignalExchangeTransmitterCognitoDnsDelegation:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !FindInMap [ParentHostedZoneIds, !Ref Environment, SignalExchangeHostedZoneId]
+      Name: !If
+        - IsProduction
+        - auth.receiver.signal-exchange.account.gov.uk
+        - !Sub 'auth.receiver.signal-exchange.${Environment}.account.gov.uk'
+      ResourceRecords: !GetAtt FraudSSFReceiverCognitoPublicHostedZone.NameServers
+      TTL: '300'
+      Type: NS
