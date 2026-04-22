@@ -13,7 +13,7 @@ Parameters:
       - production
 
 Mappings:
-  ParentHostedZoneIds:
+  ParentHostedZoneIds: # Hardcoded values as SignalExchangeHostedZones lives in the Shared Signals AWS Account in this template here https://github.com/govuk-one-login/txma-dns/blob/main/infrastructure/dns-olse-outbound/template.yaml#L25 and !ImportValue cannot be used cross-account hence why we have decided to add values in the mappings to be referenced via !FindInMap.
     build:
       SignalExchangeHostedZoneId: Z0642694YO506V4QP5
     staging:
