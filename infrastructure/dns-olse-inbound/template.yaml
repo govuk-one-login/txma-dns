@@ -39,6 +39,21 @@ Resources:
   # Route 53 records cross-account, so the delegation must be managed from the account that owns
   # the parent hosted zone.
 
+  FraudSSFReceiverApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - receiver.signal-exchange.account.gov.uk
+        - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
+      DomainValidationOptions:
+        - DomainName: !If
+            - IsProduction
+            - receiver.signal-exchange.account.gov.uk
+            - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
+          HostedZoneId: !GetAtt FraudSSFReceiverApiPublicHostedZone.Id
+      ValidationMethod: DNS
+
   ###########
   # Cognito #
   ###########
