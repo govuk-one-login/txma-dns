@@ -73,6 +73,13 @@ Resources:
       SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
       EndpointAccessMode: BASIC
 
+  FraudSSFReceiverApiDomainNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: FraudSSFReceiverApiDomainName
+      Type: String
+      Value: !Ref FraudSSFReceiverApiDomainName
+
   ###########
   # Cognito #
   ###########
