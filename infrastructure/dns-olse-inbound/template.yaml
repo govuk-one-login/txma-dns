@@ -54,6 +54,25 @@ Resources:
           HostedZoneId: !GetAtt FraudSSFReceiverApiPublicHostedZone.Id
       ValidationMethod: DNS
 
+  FraudSSFReceiverApiDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E3002 # Required as EndpointAccessMode gets flagged as "Additional property not allowed" which means that cfn-lint does not recognise this property as valid even though it is, this is possibly a fairly new property added that cfn-lint has not been able to update its validation schema.
+    Properties:
+      DomainName: !If
+        - IsProduction
+        - receiver.signal-exchange.account.gov.uk
+        - !Sub 'receiver.signal-exchange.${Environment}.account.gov.uk'
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref FraudSSFReceiverApiCertificate
+      SecurityPolicy: SecurityPolicy_TLS13_1_2_PQ_2025_09
+      EndpointAccessMode: BASIC
+
   ###########
   # Cognito #
   ###########
