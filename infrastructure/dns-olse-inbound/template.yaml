@@ -80,6 +80,17 @@ Resources:
       Type: String
       Value: !Ref FraudSSFReceiverApiDomainName
 
+  FraudSSFReceiverApiAliasRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt FraudSSFReceiverApiDomainName.RegionalDomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: !GetAtt FraudSSFReceiverApiDomainName.RegionalHostedZoneId
+      HostedZoneId: !GetAtt FraudSSFReceiverApiPublicHostedZone.Id
+      Name: !Ref FraudSSFReceiverApiDomainName
+      Type: A
+
   ###########
   # Cognito #
   ###########
