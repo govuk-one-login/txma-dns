@@ -33,7 +33,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.SHARED_SIGNALS_DNS_ZONES_GH_ACTIONS_ROLE_ARN }}
       - name: Package SAM app
-        uses: govuk-one-login/devplatform-upload-action@5879c30205266ad61e8299a4fcea76364530c9c1  # v3.14.0
+        uses: govuk-one-login/devplatform-upload-action@245bad4dc21702a5e665f1ca615108f6e70546d2  # v4.0.0
         with:
           artifact-bucket-name: ${{ secrets.SHARED_SIGNALS_DNS_ZONES_ARTIFACT_BUCKET_NAME }}
           signing-profile-name: ${{ secrets.SHARED_SIGNALS_SIGNING_PROFILE_NAME }}
