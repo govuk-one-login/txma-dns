@@ -33,7 +33,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.DNS_FRAUD_SSF_GH_ACTIONS_ROLE_ARN }}
       - name: Package SAM app
-        uses: govuk-one-login/devplatform-upload-action@245bad4dc21702a5e665f1ca615108f6e70546d2  # v4.0.0
+        uses: govuk-one-login/devplatform-upload-action@64e46134b4108ebfa1cf2a64fee00782f8e2e8cf  # v4.1.0
         with:
           artifact-bucket-name: ${{ secrets.DNS_FRAUD_SSF_ARTIFACT_BUCKET_NAME }}
           signing-profile-name: ${{ secrets.DNS_FRAUD_SSF_SIGNING_PROFILE_NAME }}
